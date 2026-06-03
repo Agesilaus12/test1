@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.CallRedirect" parent="Theme.Material3.DayNight" />
+</resources>
