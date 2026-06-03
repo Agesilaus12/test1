@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Call Redirect</string>
+    <string name="intro">Forwards every incoming call to the number below using your carrier\'s unconditional call-forwarding service. The redirect happens in the network, so calls are sent on before this phone rings.</string>
+    <string name="target_hint">Forward all calls to</string>
+    <string name="enable_button">Enable forwarding</string>
+    <string name="disable_button">Disable forwarding</string>
+    <string name="query_button">Check status with carrier</string>
+    <string name="status_on">Forwarding is ON → %1$s</string>
+    <string name="status_off">Forwarding is OFF</string>
+    <string name="permissions_granted">Permissions granted.</string>
+    <string name="permissions_needed">Phone permissions are required to send the forwarding code.</string>
+    <string name="disclaimer">Note: forwarding is provided by your mobile carrier and may incur charges or be unsupported on some networks (e.g. CDMA). Use only on a phone you are authorised to configure.</string>
+</resources>
