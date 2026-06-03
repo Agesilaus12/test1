@@ -30,10 +30,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.targetInput.setText(CallForwardingManager.getTarget(this))
+        binding.ringsInput.setText(CallForwardingManager.getRings(this).toString())
 
         binding.enableButton.setOnClickListener {
             if (!ensurePermissions()) return@setOnClickListener
-            CallForwardingManager.setTarget(this, binding.targetInput.text.toString())
+            saveSettings()
             CallForwardingManager.enableForwarding(this)
             refreshStatus()
         }
@@ -57,11 +58,23 @@ class MainActivity : AppCompatActivity() {
         refreshStatus()
     }
 
+    /** Persist the target number and ring count from the input fields. */
+    private fun saveSettings() {
+        CallForwardingManager.setTarget(this, binding.targetInput.text.toString())
+        val rings = binding.ringsInput.text.toString().toIntOrNull()
+            ?: CallForwardingManager.DEFAULT_RINGS
+        CallForwardingManager.setRings(this, rings)
+        // Reflect any clamping back into the fields.
+        binding.ringsInput.setText(CallForwardingManager.getRings(this).toString())
+    }
+
     private fun refreshStatus() {
         val enabled = CallForwardingManager.isEnabled(this)
         val target = CallForwardingManager.getTarget(this)
+        val rings = CallForwardingManager.getRings(this)
+        val seconds = CallForwardingManager.ringsToSeconds(rings)
         binding.statusText.text = if (enabled) {
-            getString(R.string.status_on, target)
+            getString(R.string.status_on, target, rings, seconds)
         } else {
             getString(R.string.status_off)
         }
