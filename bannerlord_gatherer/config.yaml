@@ -1,0 +1,70 @@
+# =============================================================================
+# Bannerlord Online gathering bot — configuration
+# All screen coordinates are for a 1920x1080 window. Re-measure for your setup.
+# Use src/tools/region_picker.py to find pixel regions on YOUR screen.
+# =============================================================================
+
+screen:
+  # Region of the whole game window we capture each frame: {left, top, width, height}
+  capture_region: { left: 0, top: 0, width: 1920, height: 1080 }
+
+keys:
+  # Movement
+  forward: "w"
+  back: "s"
+  left: "a"
+  right: "d"
+  # Game actions
+  alt_inspect: "alt"      # held to reveal on-screen text indicators
+  interact: "f"           # pick up dropped bundles / pick up tools / deposit
+  attack_button: "left"   # Mouse 1 — swing the axe/pick
+  # Safety
+  emergency_stop: "f9"    # press anytime to abort the bot immediately
+
+gather:
+  swings_per_node: 3          # Mouse-1 swings to break one resource node
+  collect_presses: 6          # F presses to vacuum up the dropped bundles
+  swing_interval_s: 0.9       # seconds between swings (tune to the swing animation)
+  collect_interval_s: 0.4     # seconds between F presses
+
+# Text the Alt-overlay shows for the things we care about. OCR matches these
+# case-insensitively as substrings, so keep them short and distinctive.
+labels:
+  resource_targets: ["tree", "oak", "pine", "birch", "rock", "stone", "ore", "iron", "copper"]
+  tool_pickup: ["tools", "instruments", "pick", "axe", "toolbox"]
+  deposit_point: ["deposit", "storehouse", "stockpile", "chest", "warehouse"]
+
+# Where the inventory / carry-weight indicator appears when Alt is held.
+# We OCR this region to read "current / max" carried items.
+capacity:
+  region: { left: 1640, top: 980, width: 260, height: 60 }
+  # Regex with two integer groups: current and max (e.g. "84 / 100" or "84/100kg")
+  pattern: '(\d+)\s*/\s*(\d+)'
+  full_threshold: 0.95        # treat as "full" at >= 95% of max
+
+navigation:
+  # Stuck detection: if successive frames barely change while we're moving, we're stuck.
+  stuck_frame_diff: 2.0       # mean abs pixel diff below this = "not moving"
+  stuck_checks_before_unstick: 4
+  unstick_back_s: 0.6
+  unstick_turn_s: 0.5
+  # How long to walk toward a target before re-reading the Alt overlay
+  approach_step_s: 0.7
+  # Screen x-band (fraction of width) considered "centered enough" to walk straight at
+  center_band: [0.42, 0.58]
+  turn_pulse_s: 0.15          # short turn taps to re-center on a target
+
+timings:
+  loop_sleep_s: 0.05
+  alt_settle_s: 0.15          # wait after pressing Alt for overlay to render before capture
+
+# ---- Optional Claude vision advisor -----------------------------------------
+# When the local OCR/heuristics can't find a target or we're stuck repeatedly,
+# send a screenshot to Claude and ask where to go / what to do.
+advisor:
+  enabled: false              # set true and export ANTHROPIC_API_KEY to use it
+  model: "claude-opus-4-8"
+  effort: "low"               # perception call — low effort keeps it fast/cheap
+  cooldown_s: 5.0             # min seconds between advisor calls (rate/cost guard)
+  trigger_after_failed_reads: 3   # local reads that found nothing before we ask Claude
+  downscale_width: 1024       # shrink screenshots before upload to cut image tokens

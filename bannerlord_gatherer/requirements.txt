@@ -1,0 +1,15 @@
+# Core real-time loop dependencies
+mss>=9.0.1            # fast screen capture
+numpy>=1.26           # frame diffing / image math
+pydirectinput>=1.0.4  # DirectInput key/mouse (works in DX games where pyautogui fails)
+keyboard>=0.13.5      # global emergency-stop hotkey
+PyYAML>=6.0           # config loading
+opencv-python>=4.9    # image preprocessing for OCR + template matching
+Pillow>=10.0          # image encoding for the Claude vision advisor
+
+# Local OCR backend (pick ONE; easyocr is more robust on game fonts, tesseract is lighter)
+easyocr>=1.7.1
+# pytesseract>=0.3.10   # alternative: requires the Tesseract binary installed separately
+
+# Optional: Claude vision "advisor" for ambiguous scenes / when local heuristics get stuck
+anthropic>=0.49.0
