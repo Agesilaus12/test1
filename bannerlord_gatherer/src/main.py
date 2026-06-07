@@ -19,13 +19,15 @@ from .capture import ScreenCapture
 from .config import load_config
 from .controls import Controls
 from .navigation import Navigator
+from .session import SessionLimiter
 from .state_machine import GatherBot, State
 from .vision import OCRBackend
 
 
 def build_bot(cfg, dry_run: bool):
     capture = ScreenCapture(cfg.screen["capture_region"])
-    controls = Controls(cfg.keys)
+    jitter = float(cfg.session.get("jitter_pct", 0.0)) if "session" in cfg else 0.0
+    controls = Controls(cfg.keys, jitter_pct=jitter)
     if dry_run:
         # Replace every input method with a no-op logger.
         import types
@@ -71,11 +73,21 @@ def main(argv=None):
         stopped["flag"] = True
 
     keyboard.add_hotkey(stop_key, _stop)
+
+    session = SessionLimiter(cfg.session) if "session" in cfg else None
     print(f"[main] running. Press {stop_key.upper()} to stop. Starting in 3s — focus the game window.")
     time.sleep(3)
 
     try:
         while not stopped["flag"]:
+            if session and session.expired():
+                print(f"[session] reached max runtime ({session.elapsed_min():.0f} min) — stopping.")
+                break
+            if session and session.due_for_break():
+                # Release everything before idling so we don't hold a key during the break.
+                controls.stop_all()
+                session.take_break()
+
             state = bot.tick()
             if state == State.STOPPED:
                 break

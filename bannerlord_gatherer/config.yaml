@@ -58,6 +58,14 @@ timings:
   loop_sleep_s: 0.05
   alt_settle_s: 0.15          # wait after pressing Alt for overlay to render before capture
 
+# Keep a single instance looking like a person who logs on for a bit and leaves.
+# This is the only "scaling" worth doing — scaling DOWN how clockwork it looks.
+session:
+  max_runtime_min: 180        # stop cleanly after this many minutes (0 = no cap)
+  break_every_min: [25, 45]   # take a break somewhere in this window of run-time
+  break_duration_s: [40, 150] # break length is randomised in this range
+  jitter_pct: 0.15            # +/- randomness applied to swing/collect/walk timings
+
 # ---- Optional Claude vision advisor -----------------------------------------
 # When the local OCR/heuristics can't find a target or we're stuck repeatedly,
 # send a screenshot to Claude and ask where to go / what to do.
