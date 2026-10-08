@@ -1,0 +1,15 @@
+{
+  "name": "agenor-logistics-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Saved copy of the Agenor Logistics single-page site, served with Vite.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.4.10"
+  }
+}

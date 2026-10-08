@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Call Redirect</string>
+    <string name="intro">Incoming calls ring this phone normally. If you don\'t answer within the chosen number of rings, your carrier forwards the call to the number below.</string>
+    <string name="target_hint">Forward unanswered calls to</string>
+    <string name="rings_hint">Forward after how many rings</string>
+    <string name="rings_helper">1–6 rings (about 5 seconds each)</string>
+    <string name="enable_button">Enable forwarding</string>
+    <string name="disable_button">Disable forwarding</string>
+    <string name="query_button">Check status with carrier</string>
+    <string name="status_on">Forwarding is ON → %1$s after %2$d rings (~%3$d s)</string>
+    <string name="status_off">Forwarding is OFF</string>
+    <string name="permissions_granted">Permissions granted.</string>
+    <string name="permissions_needed">Phone permissions are required to send the forwarding code.</string>
+    <string name="disclaimer">Note: forwarding is provided by your mobile carrier and may incur charges or be unsupported on some networks (e.g. CDMA). The no-reply timer is set in 5-second steps (5–30 s), so the actual ring count may be rounded. Use only on a phone you are authorised to configure.</string>
+</resources>
